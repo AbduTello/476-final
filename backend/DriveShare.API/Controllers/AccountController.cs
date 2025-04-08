@@ -32,11 +32,11 @@ public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
         UserName = dto.Email,
         Email = dto.Email,
-        SecurityQuestion1 = "What is your favorite color?",
+        SecurityQuestion1 = "What is your mother's maiden name?",
         SecurityAnswer1 = dto.SecurityAnswer1,
-        SecurityQuestion2 = "What is your pet's name?",
+        SecurityQuestion2 = "What was the name of your first pet?",
         SecurityAnswer2 = dto.SecurityAnswer2,
-        SecurityQuestion3 = "What city were you born in?",
+        SecurityQuestion3 = "In what city were you born?",
         SecurityAnswer3 = dto.SecurityAnswer3
     };
 
