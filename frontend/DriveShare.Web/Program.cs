@@ -13,7 +13,7 @@ builder.Services.AddHttpClient("DriveShareApi", client =>
 {
     // Use the value from configuration if available, 
     // otherwise default to backend running on localhost:5295.
-    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:5295");
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5295");
     client.Timeout = TimeSpan.FromSeconds(
         int.Parse(builder.Configuration["ApiSettings:TimeoutSeconds"] ?? "30")
     );
