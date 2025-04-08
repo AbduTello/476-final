@@ -1,0 +1,128 @@
+@page "/register"
+@using DriveShare.Web.Models
+@using DriveShare.Web.Services
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
+
+<PageTitle>Register - DriveShare</PageTitle>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center mb-4">Register</h1>
+
+            @if (errorMessage != null)
+            {
+                <div class="alert alert-danger">@errorMessage</div>
+            }
+
+            <EditForm Model="@model" OnSubmit="@HandleSubmit" FormName="registerForm">
+                <DataAnnotationsValidator />
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <InputText id="email" @bind-Value="model.Email" class="form-control" />
+                    <ValidationMessage For="@(() => model.Email)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <InputText type="password" id="password" @bind-Value="model.Password" class="form-control" />
+                    <ValidationMessage For="@(() => model.Password)" />
+                    <small class="form-text text-muted">Password must be at least 6 characters long and contain
+                        uppercase, lowercase, numbers, and special characters.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">What is your mother's maiden name?</label>
+                    <InputText @bind-Value="model.SecurityAnswer1" class="form-control" />
+                    <ValidationMessage For="@(() => model.SecurityAnswer1)" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">What was the name of your first pet?</label>
+                    <InputText @bind-Value="model.SecurityAnswer2" class="form-control" />
+                    <ValidationMessage For="@(() => model.SecurityAnswer2)" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">In what city were you born?</label>
+                    <InputText @bind-Value="model.SecurityAnswer3" class="form-control" />
+                    <ValidationMessage For="@(() => model.SecurityAnswer3)" />
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" disabled="@isRegistering">
+                    @if (isRegistering)
+                    {
+                        <span>Registering...</span>
+                    }
+                    else
+                    {
+                        <span>Register</span>
+                    }
+                </button>
+            </EditForm>
+
+            <div class="text-center mt-3">
+                <a href="/login">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private RegisterDto model = new();
+    private bool isRegistering;
+    private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        // Set the hard-coded security questions
+        model.SecurityQuestion1 = "What is your mother's maiden name?";
+        model.SecurityQuestion2 = "What was the name of your first pet?";
+        model.SecurityQuestion3 = "In what city were you born?";
+    }
+
+    private async Task HandleSubmit(EditContext editContext)
+    {
+        try
+        {
+            if (!editContext.Validate())
+            {
+                errorMessage = "Please fix the validation errors before submitting.";
+                return;
+            }
+
+            isRegistering = true;
+            errorMessage = null;
+
+            await JSRuntime.InvokeVoidAsync("console.log", "Registration attempt", new { model.Email, model.Password });
+            await JSRuntime.InvokeVoidAsync("console.log", "API Base Address", AuthService.GetBaseAddress());
+
+            var (success, error) = await AuthService.RegisterAsync(model);
+
+            if (success)
+            {
+                await JSRuntime.InvokeVoidAsync("console.log", "Registration successful");
+                NavigationManager.NavigateTo("/login");
+            }
+            else
+            {
+                errorMessage = error ?? "Registration failed. Please try again.";
+                await JSRuntime.InvokeVoidAsync("console.log", "Registration failed", error);
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred during registration.";
+            await JSRuntime.InvokeVoidAsync("console.error", "Registration error", ex.Message, ex.StackTrace);
+        }
+        finally
+        {
+            isRegistering = false;
+            StateHasChanged();
+        }
+    }
+}

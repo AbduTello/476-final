@@ -27,29 +27,25 @@ public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         return BadRequest(ModelState);
     }
     
-    // Create a new ApplicationUser with all provided details.
+    // Hard-code the questions and use the user's provided answers.
     var user = new ApplicationUser
     {
         UserName = dto.Email,
         Email = dto.Email,
-        SecurityQuestion1 = dto.SecurityQuestion1,
+        SecurityQuestion1 = "What is your favorite color?",
         SecurityAnswer1 = dto.SecurityAnswer1,
-        SecurityQuestion2 = dto.SecurityQuestion2,  // New mapping
-        SecurityAnswer2 = dto.SecurityAnswer2,        // New mapping
-        SecurityQuestion3 = dto.SecurityQuestion3,    // New mapping
-        SecurityAnswer3 = dto.SecurityAnswer3         // New mapping
+        SecurityQuestion2 = "What is your pet's name?",
+        SecurityAnswer2 = dto.SecurityAnswer2,
+        SecurityQuestion3 = "What city were you born in?",
+        SecurityAnswer3 = dto.SecurityAnswer3
     };
 
-    // Create the user using the Identity UserManager.
     var result = await _userManager.CreateAsync(user, dto.Password);
     if (result.Succeeded)
     {
-        // Optionally, sign the user in automatically (if desired).
-        // await _signInManager.SignInAsync(user, isPersistent: false);
         return Ok(new { message = "Registration successful" });
     }
 
-    // If any errors occurred during registration, add them to the ModelState.
     foreach (var error in result.Errors)
     {
         ModelState.AddModelError(string.Empty, error.Description);
