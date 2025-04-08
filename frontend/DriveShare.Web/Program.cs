@@ -8,10 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Configure HTTP client
+// Configure HTTP client for the API
 builder.Services.AddHttpClient("DriveShareApi", client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:5001");
+    // Use the value from configuration if available, 
+    // otherwise default to backend running on localhost:5295.
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:5295");
     client.Timeout = TimeSpan.FromSeconds(
         int.Parse(builder.Configuration["ApiSettings:TimeoutSeconds"] ?? "30")
     );
@@ -23,7 +25,7 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    // The default HSTS value is 30 days.
     app.UseHsts();
 }
 
