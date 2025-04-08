@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using DriveShare.Web.Components;
+using DriveShare.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,15 +10,14 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 // Configure HTTP client for the API
-builder.Services.AddHttpClient("DriveShareApi", client =>
+builder.Services.AddHttpClient<AuthService>(client =>
 {
-    // Use the value from configuration if available, 
-    // otherwise default to backend running on localhost:5295.
-    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5295");
-    client.Timeout = TimeSpan.FromSeconds(
-        int.Parse(builder.Configuration["ApiSettings:TimeoutSeconds"] ?? "30")
-    );
+    client.BaseAddress = new Uri("http://localhost:5295/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+
+// Add antiforgery services
+builder.Services.AddAntiforgery();
 
 var app = builder.Build();
 
