@@ -7,16 +7,19 @@ using Microsoft.OpenApi.Models;
 using DriveShare.API.Data;
 using DriveShare.API.Models;
 
-// Replace these with your actual namespace references if needed:
-// using YourNamespace.Data;
-// using YourNamespace.Models;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Debug: Retrieve and log the connection string
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new Exception("Connection string 'DefaultConnection' is not set or is empty.");
+}
+Console.WriteLine($"Connection string: {connectionString}");
+
+// Register services
 builder.Services.AddControllers();
 
-// Add CORS with a named policy.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
@@ -26,9 +29,9 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });
 
-// Configure EF Core with SQL Server.
+// Configure EF Core using Npgsql
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 // Configure Identity with your custom ApplicationUser.
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -52,14 +55,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// Ensure authentication is called before authorization.
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Apply the CORS policy.
 app.UseCors("AllowFrontend");
 
 app.MapControllers();
 
 app.Run();
+
+
