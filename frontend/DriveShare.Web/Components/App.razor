@@ -30,14 +30,17 @@
     [Inject]
     private AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
 
+    private bool firstRender = true;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            if (AuthStateProvider is CustomAuthStateProvider customProvider)
-            {
-                await customProvider.GetAuthenticationStateAsync();
-            }
+            Console.WriteLine("App: First render completed");
+            var customProvider = (CustomAuthStateProvider)AuthStateProvider;
+            customProvider.MarkAsRendered();
+            await customProvider.GetAuthenticationStateAsync();
+            this.firstRender = false;
         }
     }
 }

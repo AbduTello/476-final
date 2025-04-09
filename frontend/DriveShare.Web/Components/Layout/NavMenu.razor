@@ -64,7 +64,5 @@
     private async Task HandleLogout()
     {
         await AuthService.LogoutAsync();
-        NavigationManager.NavigateTo("/");
-        StateHasChanged();
     }
 }

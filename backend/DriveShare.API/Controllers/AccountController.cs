@@ -4,6 +4,7 @@ using DriveShare.API.Models;
 using DriveShare.API.Models.DTOs;
 using DriveShare.API.Services;
 using Microsoft.AspNetCore.Authorization;
+using DriveShare.API.Services.SecurityCheckers;
 
 namespace DriveShare.API.Controllers
 {
@@ -140,6 +141,52 @@ namespace DriveShare.API.Controllers
                 ActiveSessions = _sessionManager.GetActiveSessionCount(),
                 LastActivity = DateTime.UtcNow
             });
+        }
+
+        [HttpPost("recover")]
+        public async Task<IActionResult> RecoverPassword([FromBody] PasswordRecoveryDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // Create the chain of security question handlers
+            var handler1 = new SecurityQuestion1Handler();
+            var handler2 = new SecurityQuestion2Handler();
+            var handler3 = new SecurityQuestion3Handler();
+
+            // Set up the chain
+            handler1.NextHandler = handler2;
+            handler2.NextHandler = handler3;
+
+            // Start the chain
+            var isValid = await handler1.HandleAsync(user, dto);
+            if (!isValid)
+            {
+                return BadRequest("Security answers do not match");
+            }
+
+            // Reset the password
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, dto.NewPassword);
+            
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "Password has been reset successfully" });
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return BadRequest(ModelState);
         }
     }
 }
