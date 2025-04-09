@@ -220,31 +220,13 @@ public class AuthService
 
     public async Task LogoutAsync()
     {
-        if (string.IsNullOrEmpty(_authToken)) return; // Nothing to do
+        // Clear auth data
+        _authToken = null;
+        _userEmail = null;
+        await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
 
-        try
-        {
-            Console.WriteLine("Attempting logout.");
-            var client = _httpClientFactory.CreateClient("AuthService");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authToken);
-            var response = await client.PostAsync("api/account/logout", null);
-            
-             Console.WriteLine($"Logout Response status: {response.StatusCode}");
-            // No matter the response, clear the local auth state
-            await ClearAuthData();
-        }
-        catch (HttpRequestException ex)
-        {
-            Console.WriteLine($"Logout HTTP request failed: {ex.Message}");
-            // Clear local state even if server call fails
-            await ClearAuthData(); 
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception during logout: {ex.Message}");
-             // Clear local state even if server call fails
-            await ClearAuthData();
-        }
+        // Notify state change
+        AuthenticationStateChanged?.Invoke();
     }
 
     public async Task<(bool success, string? error)> RecoverPasswordAsync(PasswordRecoveryDto model)

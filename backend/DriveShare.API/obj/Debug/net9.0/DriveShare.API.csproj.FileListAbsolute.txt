@@ -99,3 +99,4 @@
 /Users/abdutello/Desktop/476-final/backend/DriveShare.API/obj/Debug/net9.0/DriveShare.API.pdb
 /Users/abdutello/Desktop/476-final/backend/DriveShare.API/obj/Debug/net9.0/DriveShare.API.genruntimeconfig.cache
 /Users/abdutello/Desktop/476-final/backend/DriveShare.API/obj/Debug/net9.0/ref/DriveShare.API.dll
+/Users/abdutello/Desktop/476-final/backend/DriveShare.API/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
