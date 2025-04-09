@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using DriveShare.Web.Components;
 using DriveShare.Web.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +11,18 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 // Configure HTTP client for the API
-builder.Services.AddHttpClient<AuthService>(client =>
+builder.Services.AddHttpClient("AuthService", client =>
 {
     client.BaseAddress = new Uri("http://localhost:5295/");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+builder.Services.AddScoped<AuthService>();
+
+// *** Add Blazor Authentication Services ***
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddAuthorizationCore();
+// ****************************************
 
 // Add antiforgery services
 builder.Services.AddAntiforgery();

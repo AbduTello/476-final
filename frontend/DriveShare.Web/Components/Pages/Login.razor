@@ -1,0 +1,104 @@
+﻿@page "/login"
+@using DriveShare.Web.Models
+@using DriveShare.Web.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+@rendermode InteractiveServer
+
+<PageTitle>Login - DriveShare</PageTitle>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Login</h2>
+
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger">@errorMessage</div>
+                    }
+                    @* No success message needed as we redirect *@
+
+                    <EditForm Model="@model" OnValidSubmit="@HandleLogin" FormName="login-form">
+                        <DataAnnotationsValidator />
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <InputText id="email" @bind-Value="model.Email" class="form-control" />
+                            <ValidationMessage For="@(() => model.Email)" class="text-danger" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <InputText type="password" id="password" @bind-Value="model.Password"
+                                class="form-control" />
+                            <ValidationMessage For="@(() => model.Password)" class="text-danger" />
+                        </div>
+
+                        <div class="mb-3 text-end">
+                            <a href="/recover-password">Forgot Password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100" disabled="@isProcessing">
+                            @if (isProcessing)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="ms-2">Logging in...</span>
+                            }
+                            else
+                            {
+                                <span>Login</span>
+                            }
+                        </button>
+                    </EditForm>
+                    <div class="text-center mt-3">
+                        <a href="/register">Don't have an account? Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginDto model = new();
+    private bool isProcessing;
+    private string? errorMessage;
+
+    private async Task HandleLogin()
+    {
+        isProcessing = true;
+        errorMessage = null;
+        StateHasChanged();
+
+        try
+        {
+            var (success, error) = await AuthService.LoginAsync(model);
+
+            if (success)
+            {
+                Console.WriteLine("Login successful, redirecting to home page");
+                // Force a state change notification
+                await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
+                NavigationManager.NavigateTo("/", forceLoad: true);
+            }
+            else
+            {
+                errorMessage = $"Login failed: {error ?? "Invalid credentials"}";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during login: {ex.Message}");
+            errorMessage = "An unexpected error occurred during login.";
+        }
+        finally
+        {
+            isProcessing = false;
+            StateHasChanged();
+        }
+    }
+}

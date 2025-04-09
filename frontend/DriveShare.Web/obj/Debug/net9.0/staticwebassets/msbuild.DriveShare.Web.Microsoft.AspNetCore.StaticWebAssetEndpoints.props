@@ -4,13 +4,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-aNPcLFwdCCGS2v1guSR64Htd4Ly5uclT7taAptnMPbs="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"2900"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022aNPcLFwdCCGS2v1guSR64Htd4Ly5uclT7taAptnMPbs=\u0022"},{"Name":"Last-Modified","Value":"Mon, 07 Apr 2025 05:34:30 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"2900"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022aNPcLFwdCCGS2v1guSR64Htd4Ly5uclT7taAptnMPbs=\u0022"},{"Name":"Last-Modified","Value":"Tue, 08 Apr 2025 22:12:08 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DriveShare.Web/app.khy4lop6wu.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"khy4lop6wu"},{"Name":"integrity","Value":"sha256-aNPcLFwdCCGS2v1guSR64Htd4Ly5uclT7taAptnMPbs="},{"Name":"label","Value":"_content/DriveShare.Web/app.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2900"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022aNPcLFwdCCGS2v1guSR64Htd4Ly5uclT7taAptnMPbs=\u0022"},{"Name":"Last-Modified","Value":"Mon, 07 Apr 2025 05:34:30 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2900"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022aNPcLFwdCCGS2v1guSR64Htd4Ly5uclT7taAptnMPbs=\u0022"},{"Name":"Last-Modified","Value":"Tue, 08 Apr 2025 22:12:08 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DriveShare.Web/DriveShare.Web.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DriveShare.Web.hgv9jmpk6d.bundle.scp.css'))</AssetFile>
