@@ -102,3 +102,8 @@
 /Users/abdutello/Desktop/476-final/frontend/DriveShare.Web/bin/Debug/net9.0/Microsoft.JSInterop.WebAssembly.dll
 /Users/abdutello/Desktop/476-final/frontend/DriveShare.Web/obj/Debug/net9.0/DriveShare.Web.csproj.AssemblyReference.cache
 /Users/abdutello/Desktop/476-final/frontend/DriveShare.Web/obj/Debug/net9.0/DriveSha.49078E6C.Up2Date
+/Users/abdutello/Desktop/476-final/frontend/DriveShare.Web/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/abdutello/Desktop/476-final/frontend/DriveShare.Web/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/abdutello/Desktop/476-final/frontend/DriveShare.Web/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/Users/abdutello/Desktop/476-final/frontend/DriveShare.Web/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/Users/abdutello/Desktop/476-final/frontend/DriveShare.Web/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll
