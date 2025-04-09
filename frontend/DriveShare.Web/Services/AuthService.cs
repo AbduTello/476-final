@@ -69,6 +69,7 @@ public class AuthService
             var tokenTask = _jsRuntime.InvokeAsync<string>("localStorage.getItem", "authToken").AsTask();
             tokenTask.Wait(); // Blocking call, but necessary for sync method
             _authToken = tokenTask.Result;
+            Console.WriteLine($"GetToken: Retrieved token from localStorage: {!string.IsNullOrEmpty(_authToken)}");
             return _authToken;
         }
         catch (Exception ex)
@@ -220,31 +221,9 @@ public class AuthService
 
     public async Task LogoutAsync()
     {
-        if (string.IsNullOrEmpty(_authToken)) return; // Nothing to do
-
-        try
-        {
-            Console.WriteLine("Attempting logout.");
-            var client = _httpClientFactory.CreateClient("AuthService");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authToken);
-            var response = await client.PostAsync("api/account/logout", null);
-            
-             Console.WriteLine($"Logout Response status: {response.StatusCode}");
-            // No matter the response, clear the local auth state
-            await ClearAuthData();
-        }
-        catch (HttpRequestException ex)
-        {
-            Console.WriteLine($"Logout HTTP request failed: {ex.Message}");
-            // Clear local state even if server call fails
-            await ClearAuthData(); 
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception during logout: {ex.Message}");
-             // Clear local state even if server call fails
-            await ClearAuthData();
-        }
+        Console.WriteLine("AuthService: Starting logout process");
+        await ClearAuthData();
+        _navigationManager.NavigateTo("/", forceLoad: true);
     }
 
     public async Task<(bool success, string? error)> RecoverPasswordAsync(PasswordRecoveryDto model)
@@ -257,16 +236,19 @@ public class AuthService
             var content = await response.Content.ReadAsStringAsync();
             
             Console.WriteLine($"Recovery Response status: {response.StatusCode}");
-            //Console.WriteLine($"Recovery Response content: {content}");
+            Console.WriteLine($"Recovery Response content: {content}");
 
             if (response.IsSuccessStatusCode)
             {
-                // Password recovery on backend doesn't return a token
                 return (true, null);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return (false, "User not found");
             }
             else
             {
-                 // Try to parse standard error format first
+                // Try to parse standard error format first
                 try
                 {
                     var errorResponse = JsonSerializer.Deserialize<Dictionary<string, string[]>>(content, _jsonOptions);
@@ -277,12 +259,12 @@ public class AuthService
                 }
                 catch (JsonException) { /* Ignore if not standard error */ }
                 // Return the raw content or a generic message
-                 return (false, string.IsNullOrWhiteSpace(content) ? "Password recovery failed." : content);
+                return (false, string.IsNullOrWhiteSpace(content) ? "Password recovery failed." : content);
             }
         }
         catch (HttpRequestException ex)
         {
-             Console.WriteLine($"Recovery HTTP request failed: {ex.Message}");
+            Console.WriteLine($"Recovery HTTP request failed: {ex.Message}");
             return (false, $"Failed to connect to the server: {ex.Message}");
         }
         catch (Exception ex)
@@ -298,6 +280,8 @@ public class AuthService
     {
         Console.WriteLine("Setting auth data with token");
         _authToken = token;
+        
+        // Set HTTP client auth header
         var client = _httpClientFactory.CreateClient("AuthService");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         
@@ -317,7 +301,7 @@ public class AuthService
 
             // Notify about the state change
             Console.WriteLine("Auth data set, notifying state change");
-            AuthenticationStateChanged?.Invoke();
+            NotifyAuthenticationStateChanged();
         }
         catch (Exception ex)
         {
@@ -328,23 +312,24 @@ public class AuthService
 
     public async Task ClearAuthData()
     {
-        Console.WriteLine("Clearing auth data");
+        Console.WriteLine("AuthService: Clearing auth data");
         _authToken = null;
         _userEmail = null;
-        var client = _httpClientFactory.CreateClient("AuthService");
-        client.DefaultRequestHeaders.Authorization = null;
         
         // Clear localStorage
         await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
         await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "userEmail");
         
-        // Notify about the state change
-        Console.WriteLine("Auth data cleared, notifying state change");
-        AuthenticationStateChanged?.Invoke();
+        // Clear HTTP client auth header
+        var client = _httpClientFactory.CreateClient("AuthService");
+        client.DefaultRequestHeaders.Authorization = null;
+        
+        Console.WriteLine("AuthService: Auth data cleared");
     }
 
     private void NotifyAuthenticationStateChanged()
     {
+        Console.WriteLine("AuthService: Notifying authentication state change");
         AuthenticationStateChanged?.Invoke();
     }
 }

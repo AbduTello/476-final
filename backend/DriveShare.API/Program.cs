@@ -29,7 +29,8 @@ builder.Services.AddCors(options =>
         policyBuilder => policyBuilder
             .WithOrigins("http://localhost:5253", "https://localhost:7292")
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 // Configure EF Core using Npgsql
