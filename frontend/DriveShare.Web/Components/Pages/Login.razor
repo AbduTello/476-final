@@ -5,6 +5,7 @@
 @inject AuthService AuthService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthStateProvider
+@inject IJSRuntime _jsRuntime
 @rendermode InteractiveServer
 
 <PageTitle>Login - DriveShare</PageTitle>
@@ -81,9 +82,14 @@
             if (success)
             {
                 Console.WriteLine("Login successful, redirecting to home page");
-                // Force a state change notification
-                await ((CustomAuthStateProvider)AuthStateProvider).GetAuthenticationStateAsync();
-                NavigationManager.NavigateTo("/", forceLoad: true);
+                // Persist token in localStorage
+                var token = AuthService.GetToken();
+                if (!string.IsNullOrEmpty(token))
+                {
+                    await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", token);
+                }
+                // Navigate without forcing reload
+                NavigationManager.NavigateTo("/");
             }
             else
             {

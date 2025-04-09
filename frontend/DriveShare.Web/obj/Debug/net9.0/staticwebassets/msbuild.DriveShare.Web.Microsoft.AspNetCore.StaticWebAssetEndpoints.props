@@ -16,13 +16,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DriveShare.Web.hgv9jmpk6d.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-gaK34aJzk4JXkxNgqASNtu8gvsZv9fs40N\u002BBAt0ydM0="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"5770"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022gaK34aJzk4JXkxNgqASNtu8gvsZv9fs40N\u002BBAt0ydM0=\u0022"},{"Name":"Last-Modified","Value":"Mon, 07 Apr 2025 05:35:29 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"5770"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022gaK34aJzk4JXkxNgqASNtu8gvsZv9fs40N\u002BBAt0ydM0=\u0022"},{"Name":"Last-Modified","Value":"Wed, 09 Apr 2025 03:17:47 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DriveShare.Web/DriveShare.Web.hgv9jmpk6d.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DriveShare.Web.hgv9jmpk6d.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"hgv9jmpk6d"},{"Name":"integrity","Value":"sha256-gaK34aJzk4JXkxNgqASNtu8gvsZv9fs40N\u002BBAt0ydM0="},{"Name":"label","Value":"_content/DriveShare.Web/DriveShare.Web.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5770"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022gaK34aJzk4JXkxNgqASNtu8gvsZv9fs40N\u002BBAt0ydM0=\u0022"},{"Name":"Last-Modified","Value":"Mon, 07 Apr 2025 05:35:29 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5770"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022gaK34aJzk4JXkxNgqASNtu8gvsZv9fs40N\u002BBAt0ydM0=\u0022"},{"Name":"Last-Modified","Value":"Wed, 09 Apr 2025 03:17:47 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DriveShare.Web/favicon.ifv42okdf2.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\favicon.png'))</AssetFile>
